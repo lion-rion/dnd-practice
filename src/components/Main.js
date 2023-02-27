@@ -3,8 +3,13 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import dummyData from "../dummyData";
 import { useState } from "react";
 import Card from "./Card";
+import YAML from "yaml";
 
 const Main = () => {
+  const [yaml, setYaml] = useState("");
+  
+  const [data, setData] = useState(dummyData);
+
   const onDragEnd = (result) => {
     const { source, destination } = result;
 
@@ -47,8 +52,19 @@ const Main = () => {
     }
   };
 
-  const [data, setData] = useState(dummyData);
+
+  const convertToYaml = () => {
+    console.log("called")
+    const yamlString = YAML.stringify(data[0], 4);
+    console.log(yamlString);
+    setYaml(yamlString);
+  }
+  
+
+
+ 
   return (
+    <>   
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="trello">
         {data.map((section) => (
@@ -90,6 +106,9 @@ const Main = () => {
         ))}
       </div>
     </DragDropContext>
+    <button onClick={convertToYaml}>変換</button><br />
+    <textarea style={{width: "1000px", height: "1000px"}} name="" id="" cols="30" rows="10" value={yaml}></textarea>
+    </>
   );
 };
 
